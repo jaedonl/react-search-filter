@@ -7,6 +7,8 @@ function App() {
   const [pokemons, setPokemons] = useState([])
   const [query, setQuery] = useState("")
 
+  const keys = ["name", "url"]
+
   useEffect(() => {
     const fetchPokemon = async () => {
       const res = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=300') 
@@ -16,19 +18,16 @@ function App() {
   }, [])
 
   const search = (data) => {
-    // return data.filter(item )
+    return data.filter((item) => 
+      keys.some(key => item[key].toLowerCase().includes(query))
+    )
   }
 
-  return (
+  return ( 
     <div className="App">
       <input type="text" placeholder="Search..." className="search" onChange={e => setQuery(e.target.value)} />
 
-      <Table data={pokemons} />
-      {/* <ul className="list">
-        {pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(query)).map((pokemon, idx) => (
-          <li key={idx} className="listItem">{pokemon.name}</li>
-        ))}                
-      </ul> */}
+      <Table data={search(pokemons)} />
     </div>
   );
 }
